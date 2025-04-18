@@ -29,4 +29,4 @@ npm run deploy
 
 ## Access the App
 
-The app is deployed at: https://YOUR_GITHUB_USERNAME.github.io/mobile-app/
+The app is deployed at: https://YongJinYit1214.github.io/typescript-app/
