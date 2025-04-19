@@ -1157,6 +1157,7 @@ body {
   padding: 1.25rem;
   margin-bottom: 1rem;
   box-shadow: var(--box-shadow);
+  color: #000000; /* Ensure text is black */
 }
 
 .location-header {
@@ -1199,15 +1200,20 @@ body {
 /* Popular cities styles */
 .popular-cities {
   margin-bottom: 1rem;
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 0.75rem;
+  border: 1px solid #e0e0e0;
 }
 
 .popular-cities-header {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-bottom: 0.5rem;
-  font-size: 0.9rem;
-  color: var(--text-color);
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+  color: #000000;
+  font-weight: 500;
 }
 
 .popular-cities-list {
@@ -1218,13 +1224,15 @@ body {
 }
 
 .popular-city {
-  background-color: var(--bg-color);
-  border: 1px solid var(--bg-dark);
+  background-color: #f5f5f5;
+  border: 1px solid #e0e0e0;
   border-radius: 20px;
-  padding: 0.25rem 0.75rem;
-  font-size: 0.85rem;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.9rem;
   cursor: pointer;
   transition: var(--transition);
+  color: #000000;
+  font-weight: 500;
 }
 
 .popular-city:hover {
@@ -1232,16 +1240,18 @@ body {
   border-color: var(--primary-color);
   color: var(--primary-color);
   transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Search tips styles */
 .search-tips {
-  background-color: var(--bg-color);
+  background-color: #ffffff;
   border-radius: 8px;
   padding: 1rem;
   margin: 1rem 0;
-  border: 1px solid var(--bg-dark);
+  border: 1px solid #e0e0e0;
   animation: fadeIn 0.3s ease-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .search-tips-header {
@@ -1249,9 +1259,11 @@ body {
   align-items: center;
   gap: 0.5rem;
   margin-bottom: 0.75rem;
-  color: var(--primary-color);
-  font-weight: 500;
-  font-size: 0.95rem;
+  color: #000000;
+  font-weight: 600;
+  font-size: 1rem;
+  border-bottom: 2px solid var(--primary-light);
+  padding-bottom: 0.5rem;
 }
 
 .tips-list {
@@ -1263,10 +1275,12 @@ body {
 .tips-list li {
   position: relative;
   padding-left: 0.5rem;
-  margin-bottom: 0.5rem;
-  font-size: 0.85rem;
-  line-height: 1.4;
-  color: var(--text-color);
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #000000;
+  display: flex;
+  align-items: flex-start;
 }
 
 .tips-list li::before {
@@ -1274,36 +1288,45 @@ body {
   position: absolute;
   left: -0.75rem;
   color: var(--primary-color);
+  font-size: 1.2rem;
+  line-height: 1;
 }
 
 .use-current-location {
-  background-color: var(--primary-light);
-  color: var(--primary-color);
-  border: none;
+  background-color: #E3F2FD;
+  color: #1976D2;
+  border: 1px solid #BBDEFB;
   border-radius: 20px;
-  padding: 0.5rem 1rem;
-  font-size: 0.9rem;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
   cursor: pointer;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   transition: var(--transition);
-  font-weight: 500;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%;
 }
 
 .use-current-location:hover {
-  background-color: var(--primary-color);
+  background-color: #1976D2;
   color: white;
   transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .current-location-name {
   font-size: 0.9rem;
-  color: var(--text-color);
-  padding: 0.5rem;
-  background-color: var(--bg-color);
-  border-radius: 4px;
+  color: #000000;
+  padding: 0.75rem;
+  background-color: #F5F5F5;
+  border-radius: 8px;
   text-align: center;
+  font-weight: 500;
+  border: 1px solid #E0E0E0;
+  margin-top: 0.5rem;
 }
 
 .location-search {
@@ -1315,14 +1338,16 @@ body {
 .location-input {
   width: 100%;
   padding: 0.75rem 1rem 0.75rem 2.5rem;
-  border: 1px solid var(--bg-dark);
+  border: 1px solid #cccccc;
   border-radius: 20px;
   font-size: 0.9rem;
-  background-color: var(--bg-color);
+  background-color: #ffffff;
+  color: #000000;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .search-button {
-  background-color: var(--primary-color);
+  background-color: #2196F3;
   color: white;
   border: none;
   border-radius: 20px;
@@ -1331,11 +1356,14 @@ body {
   cursor: pointer;
   white-space: nowrap;
   transition: var(--transition);
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .search-button:hover {
-  background-color: var(--primary-dark);
+  background-color: #1976D2;
   transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .search-button:disabled {
@@ -1358,13 +1386,15 @@ body {
 }
 
 .location-results {
-  background-color: var(--bg-color);
+  background-color: #ffffff;
   border-radius: 8px;
-  border: 1px solid var(--bg-dark);
+  border: 1px solid #cccccc;
   margin-top: 0.5rem;
-  max-height: 200px;
+  max-height: 250px;
   overflow-y: auto;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  position: relative;
 }
 
 .location-result {
@@ -1374,7 +1404,9 @@ body {
   align-items: center;
   gap: 0.5rem;
   transition: var(--transition);
-  border-bottom: 1px solid var(--bg-dark);
+  border-bottom: 1px solid #eeeeee;
+  color: #000000;
+  font-weight: 500;
 }
 
 .location-result:last-child {
@@ -1382,7 +1414,8 @@ body {
 }
 
 .location-result:hover {
-  background-color: var(--primary-light);
+  background-color: #E3F2FD;
+  color: #1976D2;
 }
 
 .location-result svg {

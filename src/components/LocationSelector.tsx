@@ -54,7 +54,7 @@ const LocationSelector = ({
   const [searching, setSearching] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [showTips, setShowTips] = useState(false);
+  const [showTips, setShowTips] = useState(true); // Always show tips by default
 
   const searchLocations = async () => {
     if (!query.trim()) return;
