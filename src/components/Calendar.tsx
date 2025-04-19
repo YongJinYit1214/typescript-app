@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import ReactCalendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar, faPlus } from '@fortawesome/free-solid-svg-icons';
-import { format } from 'date-fns';
+import { faStar, faPlus, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { format, addMonths, subMonths, addYears, subYears, getYear } from 'date-fns';
 import { CalendarEvent } from '../types';
 import { getEventsForDate, hasEvents, hasImportantEvents } from '../utils/eventStorage';
 import EventList from './EventList';
@@ -14,6 +14,12 @@ const Calendar = () => {
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [showEventForm, setShowEventForm] = useState(false);
   const [editingEvent, setEditingEvent] = useState<CalendarEvent | undefined>(undefined);
+  const [viewDate, setViewDate] = useState(new Date());
+
+  // Calculate min and max years (5 years in past and future)
+  const currentYear = new Date().getFullYear();
+  const minYear = currentYear - 5;
+  const maxYear = currentYear + 5;
 
   // Load events for the selected date
   useEffect(() => {
@@ -25,7 +31,57 @@ const Calendar = () => {
   const handleDateChange = (value: Date | Date[]) => {
     if (value instanceof Date) {
       setDate(value);
+      setViewDate(value);
     }
+  };
+
+  // Navigation functions
+  const handlePrevMonth = () => {
+    setViewDate(prevDate => {
+      const newDate = subMonths(prevDate, 1);
+      return newDate;
+    });
+  };
+
+  const handleNextMonth = () => {
+    setViewDate(prevDate => {
+      const newDate = addMonths(prevDate, 1);
+      return newDate;
+    });
+  };
+
+  const handlePrevYear = () => {
+    setViewDate(prevDate => {
+      const newDate = subYears(prevDate, 1);
+      return getYear(newDate) >= minYear ? newDate : prevDate;
+    });
+  };
+
+  const handleNextYear = () => {
+    setViewDate(prevDate => {
+      const newDate = addYears(prevDate, 1);
+      return getYear(newDate) <= maxYear ? newDate : prevDate;
+    });
+  };
+
+  // Handle month selection
+  const handleMonthChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const month = parseInt(event.target.value, 10);
+    setViewDate(prevDate => {
+      const newDate = new Date(prevDate);
+      newDate.setMonth(month);
+      return newDate;
+    });
+  };
+
+  // Handle year selection
+  const handleYearChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const year = parseInt(event.target.value, 10);
+    setViewDate(prevDate => {
+      const newDate = new Date(prevDate);
+      newDate.setFullYear(year);
+      return newDate;
+    });
   };
 
   // Add custom class to tiles with events
@@ -94,20 +150,106 @@ const Calendar = () => {
     setShowEventForm(true);
   };
 
+  // Generate month options
+  const monthOptions = [
+    { value: 0, label: 'January' },
+    { value: 1, label: 'February' },
+    { value: 2, label: 'March' },
+    { value: 3, label: 'April' },
+    { value: 4, label: 'May' },
+    { value: 5, label: 'June' },
+    { value: 6, label: 'July' },
+    { value: 7, label: 'August' },
+    { value: 8, label: 'September' },
+    { value: 9, label: 'October' },
+    { value: 10, label: 'November' },
+    { value: 11, label: 'December' },
+  ];
+
+  // Generate year options (5 years in past and future)
+  const yearOptions = [];
+  for (let year = minYear; year <= maxYear; year++) {
+    yearOptions.push({ value: year, label: year.toString() });
+  }
+
   return (
     <div className="calendar-container">
       <div className="calendar-header">
         <h2>Calendar</h2>
-        <p className="selected-date">{format(date, 'MMMM yyyy')}</p>
+        <div className="calendar-navigation">
+          <div className="year-navigation">
+            <button
+              className="nav-btn"
+              onClick={handlePrevYear}
+              aria-label="Previous Year"
+            >
+              <FontAwesomeIcon icon={faChevronLeft} /> Year
+            </button>
+
+            <select
+              value={viewDate.getFullYear()}
+              onChange={handleYearChange}
+              className="year-select"
+              aria-label="Select Year"
+            >
+              {yearOptions.map(option => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+
+            <button
+              className="nav-btn"
+              onClick={handleNextYear}
+              aria-label="Next Year"
+            >
+              Year <FontAwesomeIcon icon={faChevronRight} />
+            </button>
+          </div>
+
+          <div className="month-navigation">
+            <button
+              className="nav-btn"
+              onClick={handlePrevMonth}
+              aria-label="Previous Month"
+            >
+              <FontAwesomeIcon icon={faChevronLeft} />
+            </button>
+
+            <select
+              value={viewDate.getMonth()}
+              onChange={handleMonthChange}
+              className="month-select"
+              aria-label="Select Month"
+            >
+              {monthOptions.map(option => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+
+            <button
+              className="nav-btn"
+              onClick={handleNextMonth}
+              aria-label="Next Month"
+            >
+              <FontAwesomeIcon icon={faChevronRight} />
+            </button>
+          </div>
+        </div>
       </div>
 
       <div className="calendar-wrapper">
         <ReactCalendar
           onChange={handleDateChange}
           value={date}
+          activeStartDate={viewDate}
           tileClassName={tileClassName}
           tileContent={tileContent}
           className="react-calendar"
+          showNavigation={false}
         />
       </div>
 
