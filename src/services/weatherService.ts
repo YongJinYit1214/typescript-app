@@ -225,3 +225,30 @@ export const getCurrentLocationForecast = async (days: number = 5): Promise<Fore
     return getMockForecast(new Date(), days);
   }
 };
+
+// Get location name from coordinates using reverse geocoding
+export const getLocationName = async (latitude: number, longitude: number): Promise<string> => {
+  try {
+    const response = await fetch(
+      `https://api.openweathermap.org/geo/1.0/reverse?lat=${latitude}&lon=${longitude}&limit=1&appid=${API_KEY}`
+    );
+
+    if (!response.ok) {
+      throw new Error(`Geocoding API error: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (data && data.length > 0) {
+      const location = data[0];
+      return location.state
+        ? `${location.name}, ${location.state}, ${location.country}`
+        : `${location.name}, ${location.country}`;
+    }
+
+    return 'Unknown location';
+  } catch (error) {
+    console.error('Error getting location name:', error);
+    return 'Unknown location';
+  }
+};
