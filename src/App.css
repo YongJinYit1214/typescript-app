@@ -628,6 +628,31 @@ body {
   cursor: pointer;
 }
 
+.advanced-options-toggle {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.toggle-btn {
+  background: none;
+  border: none;
+  color: var(--primary-color);
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  transition: var(--transition);
+}
+
+.toggle-btn:hover {
+  background-color: var(--primary-light);
+}
+
+.advanced-options {
+  margin-top: 1.5rem;
+  animation: fadeIn 0.3s ease-out;
+}
+
 .form-actions {
   display: flex;
   justify-content: flex-end;
@@ -724,6 +749,484 @@ body {
   line-height: 1.7;
   color: var(--text-color);
   font-size: 1.05rem;
+}
+
+/* Search and Filter Styles */
+.search-container {
+  margin-bottom: 1.5rem;
+}
+
+.search-bar {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.search-input-container {
+  position: relative;
+  flex: 1;
+}
+
+.search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-light);
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  border: 1px solid var(--bg-dark);
+  border-radius: 20px;
+  font-size: 1rem;
+  background-color: var(--bg-light);
+  transition: var(--transition);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+.clear-search {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-light);
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 50%;
+}
+
+.clear-search:hover {
+  color: var(--secondary-color);
+  background-color: var(--secondary-light);
+}
+
+.filter-toggle {
+  background-color: var(--bg-light);
+  border: 1px solid var(--bg-dark);
+  border-radius: 20px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-color);
+  transition: var(--transition);
+}
+
+.filter-toggle:hover,
+.filter-toggle.active {
+  background-color: var(--primary-light);
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.filters-panel {
+  background-color: var(--bg-light);
+  border-radius: var(--border-radius);
+  padding: 1.25rem;
+  margin-top: 0.5rem;
+  box-shadow: var(--box-shadow);
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.filters-panel h4 {
+  margin: 0 0 1rem 0;
+  color: var(--primary-color);
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.filter-section {
+  margin-bottom: 1.25rem;
+}
+
+.filter-section h5 {
+  margin: 0 0 0.75rem 0;
+  font-size: 0.95rem;
+  color: var(--text-color);
+  font-weight: 600;
+}
+
+.category-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.category-filter {
+  padding: 0.4rem 0.75rem;
+  border-radius: 20px;
+  border: 1px solid;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: var(--transition);
+}
+
+.category-filter:hover {
+  transform: translateY(-2px);
+}
+
+.important-filter {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.important-filter input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--secondary-color);
+}
+
+.date-range-inputs {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.date-input-group {
+  flex: 1;
+  min-width: 120px;
+}
+
+.date-input-group label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 0.85rem;
+  color: var(--text-light);
+}
+
+.date-input-group input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--bg-dark);
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.filter-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.reset-filters,
+.apply-filters {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: var(--transition);
+  border: none;
+  font-weight: 500;
+}
+
+.reset-filters {
+  background-color: var(--bg-dark);
+  color: var(--text-color);
+}
+
+.apply-filters {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.reset-filters:hover {
+  background-color: var(--bg-dark);
+  transform: translateY(-2px);
+}
+
+.apply-filters:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-2px);
+}
+
+/* Recurrence Selector Styles */
+.recurrence-selector {
+  background-color: var(--bg-color);
+  border-radius: var(--border-radius);
+  padding: 1.25rem;
+  margin-top: 1rem;
+  border: 1px solid var(--bg-dark);
+}
+
+.recurrence-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  color: var(--primary-color);
+  font-weight: 500;
+}
+
+.recurrence-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.recurrence-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 20px;
+  border: 1px solid var(--bg-dark);
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 0.9rem;
+}
+
+.recurrence-option:hover {
+  background-color: var(--bg-light);
+  transform: translateY(-2px);
+}
+
+.recurrence-option.selected {
+  background-color: var(--primary-light);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.recurrence-interval {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.interval-input {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.interval-input input {
+  width: 60px;
+  padding: 0.4rem;
+  border: 1px solid var(--bg-dark);
+  border-radius: 4px;
+  text-align: center;
+}
+
+.recurrence-end {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.end-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.end-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.end-option input[type="radio"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--primary-color);
+}
+
+.end-option input[type="date"],
+.end-option input[type="number"] {
+  padding: 0.4rem;
+  border: 1px solid var(--bg-dark);
+  border-radius: 4px;
+  margin: 0 0.5rem;
+}
+
+.end-option input[type="number"] {
+  width: 60px;
+  text-align: center;
+}
+
+/* Reminder Selector Styles */
+.reminder-selector {
+  background-color: var(--bg-color);
+  border-radius: var(--border-radius);
+  padding: 1.25rem;
+  margin-top: 1rem;
+  border: 1px solid var(--bg-dark);
+}
+
+.reminder-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  color: var(--primary-color);
+  font-weight: 500;
+}
+
+.no-reminders {
+  color: var(--text-light);
+  font-style: italic;
+  margin-bottom: 1rem;
+  text-align: center;
+  padding: 0.5rem;
+}
+
+.reminder-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.reminder-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.reminder-select {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid var(--bg-dark);
+  border-radius: 4px;
+  background-color: var(--bg-light);
+}
+
+.remove-reminder {
+  background: none;
+  border: none;
+  color: var(--text-light);
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.remove-reminder:hover {
+  color: var(--secondary-color);
+  background-color: var(--secondary-light);
+}
+
+.add-reminder {
+  background-color: var(--bg-light);
+  border: 1px dashed var(--primary-color);
+  color: var(--primary-color);
+  border-radius: 20px;
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  width: 100%;
+  transition: var(--transition);
+}
+
+.add-reminder:hover {
+  background-color: var(--primary-light);
+  transform: translateY(-2px);
+}
+
+/* Weather Widget Styles */
+.weather-widget {
+  background: linear-gradient(135deg, var(--primary-light), var(--accent-light));
+  border-radius: var(--border-radius);
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--box-shadow);
+  color: var(--text-dark);
+  text-align: center;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.weather-date {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: var(--primary-dark);
+}
+
+.weather-main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.weather-icon {
+  font-size: 2.5rem;
+  color: var(--primary-color);
+  animation: pulse 2s infinite;
+}
+
+.weather-temp {
+  font-size: 1.5rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.weather-temp svg {
+  color: var(--secondary-color);
+  font-size: 1.2rem;
+}
+
+.weather-description {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.weather-details {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.weather-detail {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--text-color);
+}
+
+.weather-detail svg {
+  color: var(--primary-color);
+}
+
+.weather-loading,
+.weather-error {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: var(--text-light);
+  font-style: italic;
 }
 
 /* Media Queries for Responsive Design */

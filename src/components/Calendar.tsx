@@ -3,29 +3,86 @@ import ReactCalendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faPlus, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { format, addMonths, subMonths, addYears, subYears, getYear } from 'date-fns';
+import { format, addMonths, subMonths, addYears, subYears, getYear, isWithinInterval } from 'date-fns';
 import { CalendarEvent } from '../types';
-import { getEventsForDate, hasEvents, hasImportantEvents } from '../utils/eventStorage';
+import { getEventsForDate, hasEvents, hasImportantEvents, getEvents } from '../utils/eventStorage';
 import EventList from './EventList';
 import EventForm from './EventForm';
+import Weather from './Weather';
+import SearchBar, { FilterOptions } from './SearchBar';
+import { initializeNotifications, scheduleEventNotifications } from '../services/notificationService';
 
 const Calendar = () => {
   const [date, setDate] = useState(new Date());
   const [events, setEvents] = useState<CalendarEvent[]>([]);
+  const [filteredEvents, setFilteredEvents] = useState<CalendarEvent[]>([]);
   const [showEventForm, setShowEventForm] = useState(false);
   const [editingEvent, setEditingEvent] = useState<CalendarEvent | undefined>(undefined);
   const [viewDate, setViewDate] = useState(new Date());
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filterOptions, setFilterOptions] = useState<FilterOptions>({
+    categories: [],
+    onlyImportant: false,
+    dateRange: {
+      start: null,
+      end: null
+    }
+  });
 
   // Calculate min and max years (5 years in past and future)
   const currentYear = new Date().getFullYear();
   const minYear = currentYear - 5;
   const maxYear = currentYear + 5;
 
+  // Initialize notifications
+  useEffect(() => {
+    initializeNotifications(getEvents());
+  }, []);
+
   // Load events for the selected date
   useEffect(() => {
     const eventsForDate = getEventsForDate(date);
     setEvents(eventsForDate);
+    setFilteredEvents(eventsForDate);
   }, [date]);
+
+  // Apply search and filters
+  useEffect(() => {
+    let filtered = [...events];
+
+    // Apply search query
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(event =>
+        event.title.toLowerCase().includes(query) ||
+        (event.description && event.description.toLowerCase().includes(query))
+      );
+    }
+
+    // Apply category filter
+    if (filterOptions.categories.length > 0) {
+      filtered = filtered.filter(event =>
+        filterOptions.categories.includes(event.category)
+      );
+    }
+
+    // Apply importance filter
+    if (filterOptions.onlyImportant) {
+      filtered = filtered.filter(event => event.important);
+    }
+
+    // Apply date range filter
+    if (filterOptions.dateRange.start && filterOptions.dateRange.end) {
+      filtered = filtered.filter(event =>
+        isWithinInterval(event.date, {
+          start: filterOptions.dateRange.start!,
+          end: filterOptions.dateRange.end!
+        })
+      );
+    }
+
+    setFilteredEvents(filtered);
+  }, [events, searchQuery, filterOptions]);
 
   // Handle date change
   const handleDateChange = (value: Date | Date[]) => {
@@ -129,6 +186,11 @@ const Calendar = () => {
       saveEvent(event);
     });
 
+    // Schedule notifications for the event
+    if (event.reminderMinutes && event.reminderMinutes.length > 0) {
+      scheduleEventNotifications(event);
+    }
+
     setShowEventForm(false);
     setEditingEvent(undefined);
   };
@@ -172,8 +234,22 @@ const Calendar = () => {
     yearOptions.push({ value: year, label: year.toString() });
   }
 
+  // Handle search
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+  };
+
+  // Handle filter
+  const handleFilter = (options: FilterOptions) => {
+    setFilterOptions(options);
+  };
+
   return (
     <div className="calendar-container">
+      <Weather date={date} />
+
+      <SearchBar onSearch={handleSearch} onFilter={handleFilter} />
+
       <div className="calendar-header">
         <h2>Calendar</h2>
         <div className="calendar-navigation">
@@ -279,7 +355,7 @@ const Calendar = () => {
           />
         ) : (
           <EventList
-            events={events}
+            events={filteredEvents}
             onEdit={handleEditEvent}
             onDelete={handleDeleteEvent}
           />

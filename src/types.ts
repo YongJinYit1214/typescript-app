@@ -1,5 +1,14 @@
 export type EventCategory = 'work' | 'personal' | 'family' | 'health' | 'other';
 
+export type RecurrenceType = 'none' | 'daily' | 'weekly' | 'monthly' | 'yearly';
+
+export interface RecurrenceRule {
+  type: RecurrenceType;
+  interval: number; // Every X days/weeks/months/years
+  endDate?: Date; // Optional end date for the recurrence
+  count?: number; // Optional number of occurrences
+}
+
 export interface CategoryInfo {
   label: string;
   color: string;
@@ -21,4 +30,8 @@ export interface CalendarEvent {
   description?: string;
   important: boolean;
   category: EventCategory;
+  recurrence?: RecurrenceRule;
+  reminderMinutes?: number[]; // Minutes before event to show reminders
+  isRecurrenceInstance?: boolean; // Whether this is an instance of a recurring event
+  parentEventId?: string; // ID of the parent recurring event if this is an instance
 }

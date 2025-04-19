@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
-import { CalendarEvent, EventCategory, CATEGORIES } from '../types';
+import { CalendarEvent, EventCategory, CATEGORIES, RecurrenceRule } from '../types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar as solidStar, faTag } from '@fortawesome/free-solid-svg-icons';
 import { v4 as uuidv4 } from 'uuid';
+import RecurrenceSelector from './RecurrenceSelector';
+import ReminderSelector from './ReminderSelector';
 
 interface EventFormProps {
   selectedDate: Date;
@@ -16,6 +18,9 @@ const EventForm = ({ selectedDate, onSave, onCancel, editEvent }: EventFormProps
   const [description, setDescription] = useState('');
   const [important, setImportant] = useState(false);
   const [category, setCategory] = useState<EventCategory>('other');
+  const [recurrence, setRecurrence] = useState<RecurrenceRule | undefined>(undefined);
+  const [reminderMinutes, setReminderMinutes] = useState<number[] | undefined>(undefined);
+  const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
 
   useEffect(() => {
     if (editEvent) {
@@ -23,6 +28,13 @@ const EventForm = ({ selectedDate, onSave, onCancel, editEvent }: EventFormProps
       setDescription(editEvent.description || '');
       setImportant(editEvent.important);
       setCategory(editEvent.category || 'other');
+      setRecurrence(editEvent.recurrence);
+      setReminderMinutes(editEvent.reminderMinutes);
+
+      // If the event has advanced options, show them
+      if (editEvent.recurrence || editEvent.reminderMinutes) {
+        setShowAdvancedOptions(true);
+      }
     }
   }, [editEvent]);
 
@@ -35,7 +47,9 @@ const EventForm = ({ selectedDate, onSave, onCancel, editEvent }: EventFormProps
       title,
       description: description || undefined,
       important,
-      category
+      category,
+      recurrence,
+      reminderMinutes
     };
 
     onSave(event);
@@ -47,6 +61,9 @@ const EventForm = ({ selectedDate, onSave, onCancel, editEvent }: EventFormProps
     setDescription('');
     setImportant(false);
     setCategory('other');
+    setRecurrence(undefined);
+    setReminderMinutes(undefined);
+    setShowAdvancedOptions(false);
   };
 
   return (
@@ -109,6 +126,31 @@ const EventForm = ({ selectedDate, onSave, onCancel, editEvent }: EventFormProps
             </span>
           </label>
         </div>
+
+        <div className="advanced-options-toggle">
+          <button
+            type="button"
+            className="toggle-btn"
+            onClick={() => setShowAdvancedOptions(!showAdvancedOptions)}
+          >
+            {showAdvancedOptions ? 'Hide Advanced Options' : 'Show Advanced Options'}
+          </button>
+        </div>
+
+        {showAdvancedOptions && (
+          <div className="advanced-options">
+            <RecurrenceSelector
+              value={recurrence}
+              onChange={setRecurrence}
+              startDate={selectedDate}
+            />
+
+            <ReminderSelector
+              value={reminderMinutes}
+              onChange={setReminderMinutes}
+            />
+          </div>
+        )}
 
         <div className="form-actions">
           <button type="button" onClick={onCancel} className="cancel-btn">
