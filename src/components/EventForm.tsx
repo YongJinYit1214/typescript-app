@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { CalendarEvent } from '../types';
+import { CalendarEvent, EventCategory, CATEGORIES } from '../types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar as solidStar } from '@fortawesome/free-solid-svg-icons';
+import { faStar as solidStar, faTag } from '@fortawesome/free-solid-svg-icons';
 import { v4 as uuidv4 } from 'uuid';
 
 interface EventFormProps {
@@ -15,26 +15,29 @@ const EventForm = ({ selectedDate, onSave, onCancel, editEvent }: EventFormProps
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [important, setImportant] = useState(false);
+  const [category, setCategory] = useState<EventCategory>('other');
 
   useEffect(() => {
     if (editEvent) {
       setTitle(editEvent.title);
       setDescription(editEvent.description || '');
       setImportant(editEvent.important);
+      setCategory(editEvent.category || 'other');
     }
   }, [editEvent]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const event: CalendarEvent = {
       id: editEvent ? editEvent.id : uuidv4(),
       date: selectedDate,
       title,
       description: description || undefined,
-      important
+      important,
+      category
     };
-    
+
     onSave(event);
     resetForm();
   };
@@ -43,6 +46,7 @@ const EventForm = ({ selectedDate, onSave, onCancel, editEvent }: EventFormProps
     setTitle('');
     setDescription('');
     setImportant(false);
+    setCategory('other');
   };
 
   return (
@@ -60,7 +64,7 @@ const EventForm = ({ selectedDate, onSave, onCancel, editEvent }: EventFormProps
             placeholder="Event title"
           />
         </div>
-        
+
         <div className="form-group">
           <label htmlFor="description">Description</label>
           <textarea
@@ -71,7 +75,28 @@ const EventForm = ({ selectedDate, onSave, onCancel, editEvent }: EventFormProps
             rows={3}
           />
         </div>
-        
+
+        <div className="form-group">
+          <label htmlFor="category">
+            <FontAwesomeIcon icon={faTag} /> Category
+          </label>
+          <div className="category-selector">
+            {Object.entries(CATEGORIES).map(([key, { label, color, bgColor }]) => (
+              <div
+                key={key}
+                className={`category-option ${category === key ? 'selected' : ''}`}
+                style={{
+                  backgroundColor: bgColor,
+                  borderColor: color
+                }}
+                onClick={() => setCategory(key as EventCategory)}
+              >
+                {label}
+              </div>
+            ))}
+          </div>
+        </div>
+
         <div className="form-group important-checkbox">
           <label>
             <input
@@ -84,7 +109,7 @@ const EventForm = ({ selectedDate, onSave, onCancel, editEvent }: EventFormProps
             </span>
           </label>
         </div>
-        
+
         <div className="form-actions">
           <button type="button" onClick={onCancel} className="cancel-btn">
             Cancel

@@ -1,16 +1,17 @@
-import { CalendarEvent } from '../types';
+import { CalendarEvent, EventCategory } from '../types';
 
 // Get all events from local storage
 export const getEvents = (): CalendarEvent[] => {
   const eventsJson = localStorage.getItem('calendarEvents');
   if (!eventsJson) return [];
-  
+
   try {
     const events = JSON.parse(eventsJson);
     // Convert string dates back to Date objects
     return events.map((event: any) => ({
       ...event,
-      date: new Date(event.date)
+      date: new Date(event.date),
+      category: event.category || 'other' as EventCategory
     }));
   } catch (error) {
     console.error('Error parsing events from localStorage:', error);
@@ -22,7 +23,7 @@ export const getEvents = (): CalendarEvent[] => {
 export const saveEvent = (event: CalendarEvent): void => {
   const events = getEvents();
   const existingEventIndex = events.findIndex(e => e.id === event.id);
-  
+
   if (existingEventIndex >= 0) {
     // Update existing event
     events[existingEventIndex] = event;
@@ -30,7 +31,7 @@ export const saveEvent = (event: CalendarEvent): void => {
     // Add new event
     events.push(event);
   }
-  
+
   localStorage.setItem('calendarEvents', JSON.stringify(events));
 };
 
@@ -44,7 +45,7 @@ export const deleteEvent = (eventId: string): void => {
 // Get events for a specific date
 export const getEventsForDate = (date: Date): CalendarEvent[] => {
   const events = getEvents();
-  return events.filter(event => 
+  return events.filter(event =>
     event.date.getFullYear() === date.getFullYear() &&
     event.date.getMonth() === date.getMonth() &&
     event.date.getDate() === date.getDate()
@@ -60,4 +61,19 @@ export const hasEvents = (date: Date): boolean => {
 export const hasImportantEvents = (date: Date): boolean => {
   const events = getEventsForDate(date);
   return events.some(event => event.important);
+};
+
+// Get events by category
+export const getEventsByCategory = (category: EventCategory): CalendarEvent[] => {
+  const events = getEvents();
+  return events.filter(event => event.category === category);
+};
+
+// Get events for the current month
+export const getEventsForMonth = (date: Date): CalendarEvent[] => {
+  const events = getEvents();
+  return events.filter(event =>
+    event.date.getFullYear() === date.getFullYear() &&
+    event.date.getMonth() === date.getMonth()
+  );
 };
